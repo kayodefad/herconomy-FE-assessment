@@ -74,9 +74,22 @@ export const userSlice = createSlice({
       state.user = null;
       deleteCookie(tokenKey);
     },
-    // transfer: (state, action: PayloadAction<number>) => {
-    //   const userToTransferTo = state.users.findIndex((us) => us.id === action.payload);
-    // },
+    transfer: (state, action: PayloadAction<{ id: number; amount: number }>) => {
+      const userToTransferToIndex = state.users.findIndex((us) => us.id === action.payload.id);
+      const currentUserIndex = state.users.findIndex((us) => us.id === state.user!.id);
+      const hasEnoughBalance = state.user?.accountBalance! >= action.payload.amount;
+
+      if (!hasEnoughBalance) {
+        toast.error('Insufficient funds');
+      } else {
+        const updatedUserToTransferTo = state.users[userToTransferToIndex];
+        updatedUserToTransferTo.accountBalance += action.payload.amount;
+        state.user!.accountBalance -= action.payload.amount;
+        const updatedCurrentUser = state.users[currentUserIndex];
+        updatedCurrentUser.accountBalance -= action.payload.amount;
+        toast.success('Transfer successful');
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -109,6 +122,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, transfer } = userSlice.actions;
 
 export default userSlice.reducer;

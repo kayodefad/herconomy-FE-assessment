@@ -8,7 +8,7 @@
 import { Button } from '@/components/ui/button';
 import { capitalize, formatAmount } from '@/lib/utils';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import {
   Dialog,
@@ -21,8 +21,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAppSelector } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { v4 as uuid } from 'uuid';
+import { transfer } from '@/redux/features/user/userSlice';
 
 const LineChartTooltip = ({
   active,
@@ -45,7 +46,10 @@ const LineChartTooltip = ({
 
 const RevenueLineChart = () => {
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
+  const [amount, setAmount] = useState<number | undefined>(undefined);
 
   const transactions = [
     {
@@ -136,10 +140,15 @@ const RevenueLineChart = () => {
     },
   ];
 
-  // const handleTransfer = (value: string) => {
-  //   const userToTransferTo = user.users.find(us => us.id === +value);
+  const handleTransfer = () => {
+    dispatch(transfer({ id: +value, amount: amount as number }));
+    setOpen(false);
+  };
 
-  // }
+  const handleAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = parseFloat(event.target.value);
+    setAmount(Number.isNaN(inputValue) ? undefined : inputValue);
+  };
 
   return (
     <div className="flex h-full flex-col justify-between gap-12">
@@ -157,7 +166,12 @@ const RevenueLineChart = () => {
             )}
           </p>
         </div>
-        <Dialog>
+        <Dialog
+          open={open}
+          onOpenChange={(open) => {
+            setOpen(open);
+          }}
+        >
           <DialogTrigger asChild>
             <Button className="h-auto w-[167px] rounded-full px-7 py-[14px] text-base">Transfer</Button>
           </DialogTrigger>
@@ -188,13 +202,26 @@ const RevenueLineChart = () => {
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <input
+              type="number"
+              className="focus:border-green h-10 w-full rounded border border-[#C3C3C3] bg-white px-3 focus:outline-none focus:ring-0"
+              placeholder="Amount"
+              name="amount"
+              value={amount}
+              onChange={handleAmountChange}
+            />
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" className="min-w-[120px] uppercase" variant="secondary">
                   Cancel
                 </Button>
               </DialogClose>
-              <Button disabled={!value} type="submit" className="min-w-[120px] uppercase">
+              <Button
+                onClick={handleTransfer}
+                disabled={!value || !amount || amount <= 0}
+                type="button"
+                className="min-w-[120px] uppercase"
+              >
                 Transfer now
               </Button>
             </DialogFooter>
