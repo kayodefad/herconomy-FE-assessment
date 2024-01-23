@@ -1,3 +1,18 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["airbnb", "airbnb/hooks", "eslint:recommended", "next", "next/core-web-vitals"],
+  "rules": {
+    "react/jsx-filename-extension": "off",
+    "react/require-default-props": "off",
+    "import/extensions": "off",
+    "react/function-component-definition": "off",
+    "max-len": "off",
+    "react/jsx-props-no-spreading": "off",
+    "object-curly-newline": "off",
+    "import/prefer-default-export": "off",
+    "arrow-body-style": "off",
+    "no-undef": "off",
+    "implicit-arrow-linebreak": "off",
+    "import/no-cycle": "off",
+    "no-param-reassign": "off"
+  }
 }
