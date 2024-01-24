@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/no-unescaped-entities */
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -71,11 +74,27 @@ const Login = () => {
             Login
           </Button>
           <div className="mt-3">
-            <span>
+            <div className="mt-3 flex gap-6">
+              <div>
+                <span className="font-medium">Test Regular Account:</span>
+                <br />
+                <span>Username: djoris2</span>
+                <br />
+                <span>Password: gO4ox_7sw'X</span>
+              </div>
+              <div>
+                <span className="font-medium">Test Admin Account:</span>
+                <br />
+                <span>Username: gtwidle0</span>
+                <br />
+                <span>Password: {'cA2r}OlWj'}</span>
+              </div>
+            </div>
+            <div className="mt-3">
               {
-                'NB: Sample login details in "usersData.ts" file (username and password fields). There\'s an "isAdmin" property for an admin user too.'
+                'NB: More sample login details in "usersData.ts" file (username and password fields). There\'s an "isAdmin" property for an admin user too.'
               }
-            </span>
+            </div>
           </div>
         </div>
       </div>
