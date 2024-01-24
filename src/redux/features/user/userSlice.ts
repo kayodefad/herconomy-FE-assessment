@@ -74,7 +74,7 @@ export const userSlice = createSlice({
       state.user = null;
       deleteCookie(tokenKey);
     },
-    transfer: (state, action: PayloadAction<{ id: number; amount: number }>) => {
+    transfer: (state, action: PayloadAction<{ id: number; amount: number; onSuccess: () => void }>) => {
       const userToTransferToIndex = state.users.findIndex((us) => us.id === action.payload.id);
       const currentUserIndex = state.users.findIndex((us) => us.id === state.user!.id);
       const hasEnoughBalance = state.user?.accountBalance! >= action.payload.amount;
@@ -88,6 +88,7 @@ export const userSlice = createSlice({
         const updatedCurrentUser = state.users[currentUserIndex];
         updatedCurrentUser.accountBalance -= action.payload.amount;
         toast.success('Transfer successful');
+        action.payload.onSuccess();
       }
     },
     deleteUser: (state, action: PayloadAction<number>) => {

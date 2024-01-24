@@ -52,8 +52,7 @@ const RevenueLineChart = () => {
   const [amount, setAmount] = useState<number | undefined>(undefined);
 
   const handleTransfer = () => {
-    dispatch(transfer({ id: +value, amount: amount as number }));
-    setOpen(false);
+    dispatch(transfer({ id: +value, amount: amount as number, onSuccess: () => setOpen(false) }));
   };
 
   const handleAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
