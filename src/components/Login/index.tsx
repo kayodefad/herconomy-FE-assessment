@@ -1,11 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { isAuthenticated } from '@/lib/utils';
 import { login } from '@/redux/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { isAuthenticated } from '@/lib/utils';
 import Loader from '../Loader';
 
 const Login = () => {

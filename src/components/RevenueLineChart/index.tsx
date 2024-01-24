@@ -105,7 +105,11 @@ const RevenueLineChart = () => {
                   <SelectLabel>Users</SelectLabel>
                   {userSlice?.users?.map((item) => {
                     return (
-                      <SelectItem disabled={item.id === userSlice.user!.id} key={uuid()} value={item.id.toString()}>
+                      <SelectItem
+                        disabled={!!userSlice.user && item.id === userSlice.user.id}
+                        key={uuid()}
+                        value={item.id.toString()}
+                      >
                         {`${item.first_name} ${item.last_name}`}
                       </SelectItem>
                     );

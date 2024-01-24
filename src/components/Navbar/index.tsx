@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 import React from 'react';
 import { UserIcon } from 'lucide-react';
 import { logout } from '@/redux/features/user/userSlice';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import HomeIcon from '../IconSVGs/HomeIcon';
 import AnalyticsIcon from '../IconSVGs/AnalyticsIcon';
 import RevenueIcon from '../IconSVGs/RevenueIcon';
@@ -19,36 +19,45 @@ type Navlink = {
   link: string;
   icon: React.JSX.Element;
   activeIcon: React.JSX.Element;
+  show: boolean;
 };
 
-const navLinks: Navlink[] = [
-  {
-    name: 'Home',
-    link: 'dashboard',
-    icon: <HomeIcon />,
-    activeIcon: <HomeIcon fill="white" />,
-  },
-  {
-    name: 'Savings',
-    link: 'savings',
-    icon: <AnalyticsIcon />,
-    activeIcon: <AnalyticsIcon fill="white" />,
-  },
-  {
-    name: 'Invest',
-    link: 'invest',
-    icon: <RevenueIcon />,
-    activeIcon: <RevenueIcon fill="white" />,
-  },
-  {
-    name: 'Users',
-    link: 'users',
-    icon: <UserIcon size={20} color="#56616B" />,
-    activeIcon: <UserIcon size={20} color="white" />,
-  },
-];
-
 function Navbar() {
+  const userSlice = useAppSelector((state) => state.user);
+
+  const navLinks: Navlink[] = [
+    {
+      name: 'Home',
+      link: 'dashboard',
+      icon: <HomeIcon />,
+      activeIcon: <HomeIcon fill="white" />,
+      show: true,
+    },
+    {
+      name: 'Savings',
+      link: 'savings',
+      icon: <AnalyticsIcon />,
+      activeIcon: <AnalyticsIcon fill="white" />,
+      show: true,
+    },
+    {
+      name: 'Invest',
+      link: 'invest',
+      icon: <RevenueIcon />,
+      activeIcon: <RevenueIcon fill="white" />,
+      show: true,
+    },
+    {
+      name: 'Users',
+      link: 'users',
+      icon: <UserIcon size={20} color="#56616B" />,
+      activeIcon: <UserIcon size={20} color="white" />,
+      show: userSlice.user?.isAdmin as boolean,
+    },
+  ];
+
+  const filteredNavLinks = navLinks.filter((link) => link.show);
+
   const router = useRouter();
   const dispatch = useAppDispatch();
   const pathname = usePathname();
@@ -64,7 +73,7 @@ function Navbar() {
           <span className="text-5xl font-bold uppercase">H</span>
         </Link>
         <ul className="flex items-center gap-6">
-          {navLinks.map((link) => (
+          {filteredNavLinks.map((link) => (
             <li key={uuid()}>
               <Link
                 href={link.link}

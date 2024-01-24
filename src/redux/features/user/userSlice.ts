@@ -90,6 +90,10 @@ export const userSlice = createSlice({
         toast.success('Transfer successful');
       }
     },
+    deleteUser: (state, action: PayloadAction<number>) => {
+      state.users = state.users.filter((user) => user.id !== action.payload);
+      toast.success('User deleted');
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -122,6 +126,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout, transfer } = userSlice.actions;
+export const { logout, transfer, deleteUser } = userSlice.actions;
 
 export default userSlice.reducer;
